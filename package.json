@@ -1,0 +1,24 @@
+{
+  "name": "media-database",
+  "version": "1.0.0",
+  "description": "personal lists of different kind of media with detailed infos and sortable by tags",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Emtrixx/media-database.git"
+  },
+  "author": "Jesse Günzl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Emtrixx/media-database/issues"
+  },
+  "homepage": "https://github.com/Emtrixx/media-database#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "ejs-mate": "^3.0.0",
+    "express": "^4.17.1"
+  }
+}
