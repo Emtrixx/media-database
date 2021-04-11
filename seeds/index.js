@@ -1,4 +1,4 @@
-if(process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
 
@@ -6,9 +6,10 @@ const mongoose = require('mongoose');
 const Movie = require('../models/movies');
 const moviesList = require('./top100');
 const fetch = require('node-fetch');
+const { response } = require('express');
 
-const dbUrl = "mongodb://localhost/media-db" || process.env.DB_URL 
-mongoose.connect(dbUrl, { 
+const dbUrl = "mongodb://localhost:27017/media-db" || process.env.DB_URL
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -23,23 +24,21 @@ mongoose.connect(dbUrl, {
 
 const seedDB = async () => {
     await Movie.deleteMany({});
-    // moviesList.forEach(async (mov) => {
-        fetch(`https://api.themoviedb.org/3/find/tt0110912?api_key=${process.env.MOVIEDB_API_KEY}&language=en-US&external_source=imdb_id`)
-            .then(res => res.json())
-            .then(async (data) => {
-                const foundMovie = data.movie_results[0]
-                const newMovie = new Movie({
-                    // id: foundMovie.id,
-                    title: foundMovie.title,
-                    // watched: '2002-12-09',
-                    // description: foundMovie.overview,
-                    // release_date: foundMovie.release_date,
-                    // language: foundMovie.original_language
-                })
-                console.log(newMovie)
-                await newMovie.save()
-            })
-    // })
+    for (let i = 0; i < moviesList.length; i++) {
+        let response = await fetch(`https://api.themoviedb.org/3/find/${moviesList[i].id}?api_key=${process.env.MOVIEDB_API_KEY}&language=en-US&external_source=imdb_id`)
+        let data = await response.json();
+        const foundMovie = data.movie_results[0]
+        const newMovie = new Movie({
+            id: foundMovie.id,
+            title: foundMovie.title,
+            watched: '2002-12-09',
+            description: foundMovie.overview,
+            release_date: foundMovie.release_date,
+            language: foundMovie.original_language
+        })
+        await newMovie.save()
+    }
+
 }
 
 seedDB().then(() => {
